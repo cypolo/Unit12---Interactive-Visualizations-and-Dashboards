@@ -18,8 +18,11 @@ app = Flask(__name__)
 # Database Setup
 #################################################
 
-app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///db/bellybutton.sqlite"
+# DATABASE_URL will contain the database connection string:
+app.config["SQLALCHEMY_DATABASE_URI"] = os.environ.get("DATABASE_URL", "") or "sqlite:///db/bellybutton.sqlite"
+# Connects to the database using the app config
 db = SQLAlchemy(app)
+
 
 # reflect an existing database into a new model
 Base = automap_base()
@@ -98,4 +101,5 @@ def samples(sample):
 
 
 if __name__ == "__main__":
-    app.run()
+    port = int(os.environ.get('PORT', 5000))
+    app.run(host='0.0.0.0', port=port)
